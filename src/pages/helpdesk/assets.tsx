@@ -14,40 +14,29 @@ export default function HelpdeskAssets() {
   const [searchQuery, setSearchQuery] = useState("");
   const { data: stats, isLoading: statsLoading } = useITAMStats();
 
-  const handleAddAssetClick = () => {
-    console.log("=== ADD ASSET BUTTON CLICKED ===");
-    console.log("Current state:", createDialogOpen);
-    setCreateDialogOpen(true);
-    console.log("State set to true");
-  };
-
   return (
-    <div className="max-w-7xl">
-      {/* Debug Test Button */}
-      <div className="mb-4 p-4 bg-yellow-100 dark:bg-yellow-900 rounded">
-        <p className="text-sm mb-2">Debug: Dialog state is {createDialogOpen ? "OPEN" : "CLOSED"}</p>
-        <Button 
-          onClick={handleAddAssetClick}
-          variant="destructive"
-          type="button"
-        >
-          🧪 TEST: Click Me to Open Dialog
-        </Button>
-      </div>
-
-      <div className="flex items-center justify-between mb-6 relative">
-        <div>
-          <h2 className="text-2xl font-bold mb-1">IT Asset Management</h2>
-          <p className="text-muted-foreground">Track and manage IT assets, assignments, vendors, and licenses</p>
+    <div className="w-full relative">
+      {/* Header Section - Fixed positioning */}
+      <div className="sticky top-0 z-50 bg-background pb-4 mb-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <h2 className="text-2xl font-bold mb-1">IT Asset Management</h2>
+            <p className="text-muted-foreground">Track and manage IT assets, assignments, vendors, and licenses</p>
+          </div>
+          <Button 
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              console.log("=== BUTTON CLICKED ===");
+              setCreateDialogOpen(true);
+            }}
+            type="button"
+            className="shrink-0"
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            Add Asset
+          </Button>
         </div>
-        <Button 
-          onClick={handleAddAssetClick}
-          className="relative z-50"
-          type="button"
-        >
-          <Plus className="h-4 w-4 mr-2" />
-          Add Asset
-        </Button>
       </div>
 
       {/* Stats Grid */}
@@ -107,7 +96,7 @@ export default function HelpdeskAssets() {
 
       {/* Main Content with Tabs */}
       <Tabs defaultValue="all" className="space-y-4">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <TabsList>
             <TabsTrigger value="all">All Assets</TabsTrigger>
             <TabsTrigger value="assigned">Assigned</TabsTrigger>
@@ -115,7 +104,7 @@ export default function HelpdeskAssets() {
             <TabsTrigger value="maintenance">Maintenance</TabsTrigger>
           </TabsList>
           
-          <div className="relative w-64">
+          <div className="relative w-full sm:w-64">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="Search assets..."
@@ -143,13 +132,13 @@ export default function HelpdeskAssets() {
         </TabsContent>
       </Tabs>
 
-      <CreateAssetDialog
-        open={createDialogOpen}
-        onOpenChange={(open) => {
-          console.log("Dialog onOpenChange called with:", open);
-          setCreateDialogOpen(open);
-        }}
-      />
+      {/* Dialog - Always at the end */}
+      {createDialogOpen && (
+        <CreateAssetDialog
+          open={createDialogOpen}
+          onOpenChange={setCreateDialogOpen}
+        />
+      )}
     </div>
   );
 }
