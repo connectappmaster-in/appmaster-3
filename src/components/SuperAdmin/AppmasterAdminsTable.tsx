@@ -183,7 +183,13 @@ export const AppmasterAdminsTable = () => {
   };
 
   const handleResetPassword = (admin: any) => {
-    setResetPasswordDialog({ open: true, user: admin });
+    setResetPasswordDialog({ 
+      open: true, 
+      user: {
+        ...admin,
+        auth_user_id: admin.user_id, // Map user_id to auth_user_id for admins
+      }
+    });
   };
 
   const getRoleBadgeColor = (role: string) => {

@@ -42,6 +42,7 @@ interface ResetPasswordDialogProps {
   onOpenChange: (open: boolean) => void;
   user: {
     id: string;
+    auth_user_id: string;
     name: string;
     email: string;
   } | null;
@@ -73,7 +74,7 @@ export const ResetPasswordDialog = ({
     try {
       const { data, error } = await supabase.functions.invoke('admin-reset-password', {
         body: {
-          userId: user.id,
+          userId: user.auth_user_id,
           newPassword: values.newPassword,
         },
       });
