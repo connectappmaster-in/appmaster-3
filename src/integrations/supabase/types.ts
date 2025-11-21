@@ -100,6 +100,154 @@ export type Database = {
         }
         Relationships: []
       }
+      asset_assignments: {
+        Row: {
+          asset_id: number
+          assigned_at: string | null
+          assigned_by: string | null
+          assigned_to: string
+          condition_at_assignment: string | null
+          condition_at_return: string | null
+          created_at: string | null
+          id: number
+          notes: string | null
+          organisation_id: string | null
+          returned_at: string | null
+          tenant_id: number
+          updated_at: string | null
+        }
+        Insert: {
+          asset_id: number
+          assigned_at?: string | null
+          assigned_by?: string | null
+          assigned_to: string
+          condition_at_assignment?: string | null
+          condition_at_return?: string | null
+          created_at?: string | null
+          id?: number
+          notes?: string | null
+          organisation_id?: string | null
+          returned_at?: string | null
+          tenant_id: number
+          updated_at?: string | null
+        }
+        Update: {
+          asset_id?: number
+          assigned_at?: string | null
+          assigned_by?: string | null
+          assigned_to?: string
+          condition_at_assignment?: string | null
+          condition_at_return?: string | null
+          created_at?: string | null
+          id?: number
+          notes?: string | null
+          organisation_id?: string | null
+          returned_at?: string | null
+          tenant_id?: number
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "asset_assignments_asset_id_fkey"
+            columns: ["asset_id"]
+            isOneToOne: false
+            referencedRelation: "assets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "asset_assignments_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "asset_assignments_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      asset_licenses: {
+        Row: {
+          cost: number | null
+          created_at: string | null
+          created_by: string | null
+          expiry_date: string | null
+          id: number
+          license_key: string | null
+          license_type: string | null
+          name: string
+          notes: string | null
+          organisation_id: string | null
+          purchase_date: string | null
+          seats_total: number
+          seats_used: number
+          software_name: string
+          status: string | null
+          tenant_id: number
+          updated_at: string | null
+          vendor: string | null
+        }
+        Insert: {
+          cost?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          expiry_date?: string | null
+          id?: number
+          license_key?: string | null
+          license_type?: string | null
+          name: string
+          notes?: string | null
+          organisation_id?: string | null
+          purchase_date?: string | null
+          seats_total?: number
+          seats_used?: number
+          software_name: string
+          status?: string | null
+          tenant_id: number
+          updated_at?: string | null
+          vendor?: string | null
+        }
+        Update: {
+          cost?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          expiry_date?: string | null
+          id?: number
+          license_key?: string | null
+          license_type?: string | null
+          name?: string
+          notes?: string | null
+          organisation_id?: string | null
+          purchase_date?: string | null
+          seats_total?: number
+          seats_used?: number
+          software_name?: string
+          status?: string | null
+          tenant_id?: number
+          updated_at?: string | null
+          vendor?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "asset_licenses_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "asset_licenses_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       assets: {
         Row: {
           asset_type: string | null
@@ -2121,6 +2269,67 @@ export type Database = {
             columns: ["tool_id"]
             isOneToOne: false
             referencedRelation: "tools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      license_assignments: {
+        Row: {
+          assigned_at: string | null
+          assigned_by: string | null
+          assigned_to: string
+          created_at: string | null
+          id: number
+          license_id: number
+          notes: string | null
+          organisation_id: string | null
+          revoked_at: string | null
+          tenant_id: number
+        }
+        Insert: {
+          assigned_at?: string | null
+          assigned_by?: string | null
+          assigned_to: string
+          created_at?: string | null
+          id?: number
+          license_id: number
+          notes?: string | null
+          organisation_id?: string | null
+          revoked_at?: string | null
+          tenant_id: number
+        }
+        Update: {
+          assigned_at?: string | null
+          assigned_by?: string | null
+          assigned_to?: string
+          created_at?: string | null
+          id?: number
+          license_id?: number
+          notes?: string | null
+          organisation_id?: string | null
+          revoked_at?: string | null
+          tenant_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "license_assignments_license_id_fkey"
+            columns: ["license_id"]
+            isOneToOne: false
+            referencedRelation: "asset_licenses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "license_assignments_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "license_assignments_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
             referencedColumns: ["id"]
           },
         ]

@@ -7,6 +7,7 @@ import { Loader2, Package, Calendar, DollarSign, TrendingDown } from "lucide-rea
 import { format } from "date-fns";
 import { useState } from "react";
 import { EditAssetDialog } from "./EditAssetDialog";
+import { AssignAssetDialog } from "./AssignAssetDialog";
 
 interface AssetsListProps {
   status?: string;
@@ -21,6 +22,7 @@ const statusColors: Record<string, string> = {
 
 export const AssetsList = ({ status }: AssetsListProps) => {
   const [editAsset, setEditAsset] = useState<any>(null);
+  const [assignAsset, setAssignAsset] = useState<any>(null);
 
   const { data: assets = [], isLoading } = useQuery({
     queryKey: ["assets", status],
@@ -135,13 +137,22 @@ export const AssetsList = ({ status }: AssetsListProps) => {
                 </div>
               )}
 
-              <Button
-                variant="outline"
-                className="w-full mt-4"
-                onClick={() => setEditAsset(asset)}
-              >
-                View Details
-              </Button>
+              <div className="flex gap-2 mt-4">
+                <Button
+                  variant="outline"
+                  className="flex-1"
+                  onClick={() => setEditAsset(asset)}
+                >
+                  Edit
+                </Button>
+                <Button
+                  variant="default"
+                  className="flex-1"
+                  onClick={() => setAssignAsset(asset)}
+                >
+                  Assign
+                </Button>
+              </div>
             </CardContent>
           </Card>
         ))}
@@ -152,6 +163,14 @@ export const AssetsList = ({ status }: AssetsListProps) => {
           asset={editAsset}
           open={!!editAsset}
           onOpenChange={(open) => !open && setEditAsset(null)}
+        />
+      )}
+      
+      {assignAsset && (
+        <AssignAssetDialog
+          asset={assignAsset}
+          open={!!assignAsset}
+          onOpenChange={(open) => !open && setAssignAsset(null)}
         />
       )}
     </>
