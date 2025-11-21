@@ -21,7 +21,13 @@ export default function HelpdeskAssets() {
           <h2 className="text-2xl font-bold mb-1">IT Asset Management</h2>
           <p className="text-muted-foreground">Track and manage IT assets, assignments, vendors, and licenses</p>
         </div>
-        <Button onClick={() => setCreateDialogOpen(true)}>
+        <Button 
+          onClick={() => {
+            console.log("Add Asset button clicked");
+            setCreateDialogOpen(true);
+          }}
+          className="z-10"
+        >
           <Plus className="h-4 w-4 mr-2" />
           Add Asset
         </Button>
