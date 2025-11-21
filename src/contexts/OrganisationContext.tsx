@@ -37,7 +37,7 @@ export const OrganisationProvider = ({ children }: { children: React.ReactNode }
       const { data: userData, error: userError } = await supabase
         .from("users")
         .select("organisation_id")
-        .eq("id", user.id)
+        .eq("auth_user_id", user.id)
         .single();
 
       if (userError) throw userError;
