@@ -80,10 +80,28 @@ export default {
             height: "0",
           },
         },
+        "pulse-glow": {
+          "0%, 100%": {
+            boxShadow: "0 0 20px hsl(var(--timer-glow) / 0.2)",
+          },
+          "50%": {
+            boxShadow: "0 0 40px hsl(var(--timer-glow) / 0.4)",
+          },
+        },
+        "rotate": {
+          from: {
+            transform: "rotate(0deg)",
+          },
+          to: {
+            transform: "rotate(360deg)",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "pulse-glow": "pulse-glow 2s ease-in-out infinite",
+        "rotate": "rotate 1s linear infinite",
       },
     },
   },
