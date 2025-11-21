@@ -21,6 +21,7 @@ import Depreciation from "./pages/depreciation";
 import Invoicing from "./pages/invoicing";
 import Attendance from "./pages/attendance";
 // Helpdesk imports
+import HelpdeskLayout from "./pages/helpdesk/layout";
 import HelpdeskDashboard from "./pages/helpdesk/index";
 import HelpdeskTickets from "./pages/helpdesk/tickets/index";
 import TicketDetail from "./pages/helpdesk/tickets/[id]";
@@ -130,10 +131,12 @@ const App = () => {
           <Route path="/attendance" element={<ToolAccessGuard toolKey="attendance"><Attendance /></ToolAccessGuard>} />
           
           {/* Helpdesk Routes - All under /helpdesk */}
-          <Route path="/helpdesk" element={<ToolAccessGuard toolKey="helpdesk"><HelpdeskDashboard /></ToolAccessGuard>} />
-          <Route path="/helpdesk/tickets" element={<ToolAccessGuard toolKey="helpdesk"><HelpdeskTickets /></ToolAccessGuard>} />
-          <Route path="/helpdesk/tickets/:id" element={<ToolAccessGuard toolKey="helpdesk"><TicketDetail /></ToolAccessGuard>} />
-          <Route path="/helpdesk/new" element={<ToolAccessGuard toolKey="helpdesk"><NewTicket /></ToolAccessGuard>} />
+          <Route path="/helpdesk" element={<ToolAccessGuard toolKey="helpdesk"><HelpdeskLayout /></ToolAccessGuard>}>
+            <Route index element={<HelpdeskDashboard />} />
+            <Route path="tickets" element={<HelpdeskTickets />} />
+            <Route path="tickets/:id" element={<TicketDetail />} />
+            <Route path="new" element={<NewTicket />} />
+          </Route>
           
           <Route path="/srm" element={<ToolAccessGuard toolKey="srm"><SRM /></ToolAccessGuard>} />
           <Route path="/srm/request/:requestId" element={<ToolAccessGuard toolKey="srm"><RequestDetail /></ToolAccessGuard>} />
