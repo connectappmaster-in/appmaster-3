@@ -102,7 +102,7 @@ export const HelpdeskTicketList = ({ status }: HelpdeskTicketListProps) => {
         <Card
           key={ticket.id}
           className="cursor-pointer hover:shadow-md transition-shadow"
-          onClick={() => navigate(`/helpdesk/ticket/${ticket.id}`)}
+          onClick={() => navigate(`/helpdesk/tickets/${ticket.id}`)}
         >
           <CardContent className="p-6">
             <div className="flex items-start justify-between gap-4">
