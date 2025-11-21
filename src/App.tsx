@@ -71,6 +71,8 @@ import AppDetailPage from "./pages/apps/[slug]";
 import Notifications from "./pages/Notifications";
 import TicketDetail from "./pages/helpdesk/TicketDetail";
 import SRM from "./pages/srm/index";
+import RequestDetail from "./pages/srm/RequestDetail";
+import ITAM from "./pages/itam/index";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -125,6 +127,8 @@ const App = () => {
           <Route path="/helpdesk" element={<ToolAccessGuard toolKey="helpdesk"><HelpDesk /></ToolAccessGuard>} />
           <Route path="/helpdesk/ticket/:ticketId" element={<ToolAccessGuard toolKey="helpdesk"><TicketDetail /></ToolAccessGuard>} />
           <Route path="/srm" element={<ToolAccessGuard toolKey="srm"><SRM /></ToolAccessGuard>} />
+          <Route path="/srm/request/:requestId" element={<ToolAccessGuard toolKey="srm"><RequestDetail /></ToolAccessGuard>} />
+          <Route path="/itam" element={<ToolAccessGuard toolKey="itam"><ITAM /></ToolAccessGuard>} />
           <Route path="/subscriptions" element={<Subscriptions />}>
             <Route index element={<SubscriptionsDashboardPage />} />
             <Route path="tools" element={<SubscriptionsToolsPage />} />
