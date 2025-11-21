@@ -15,28 +15,23 @@ export default function HelpdeskAssets() {
   const { data: stats, isLoading: statsLoading } = useITAMStats();
 
   return (
-    <div className="w-full relative">
-      {/* Header Section - Fixed positioning */}
-      <div className="sticky top-0 z-50 bg-background pb-4 mb-6">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div>
-            <h2 className="text-2xl font-bold mb-1">IT Asset Management</h2>
-            <p className="text-muted-foreground">Track and manage IT assets, assignments, vendors, and licenses</p>
-          </div>
-          <Button 
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              console.log("=== BUTTON CLICKED ===");
-              setCreateDialogOpen(true);
-            }}
-            type="button"
-            className="shrink-0"
-          >
-            <Plus className="h-4 w-4 mr-2" />
-            Add Asset
-          </Button>
+    <div className="w-full">
+      {/* Header Section */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 className="text-2xl font-bold mb-1">IT Asset Management</h2>
+          <p className="text-muted-foreground">Track and manage IT assets, assignments, vendors, and licenses</p>
         </div>
+        <Button 
+          onClick={() => {
+            console.log("=== ADD ASSET CLICKED ===");
+            setCreateDialogOpen(true);
+          }}
+          className="shrink-0"
+        >
+          <Plus className="h-4 w-4 mr-2" />
+          Add Asset
+        </Button>
       </div>
 
       {/* Stats Grid */}
@@ -132,13 +127,11 @@ export default function HelpdeskAssets() {
         </TabsContent>
       </Tabs>
 
-      {/* Dialog - Always at the end */}
-      {createDialogOpen && (
-        <CreateAssetDialog
-          open={createDialogOpen}
-          onOpenChange={setCreateDialogOpen}
-        />
-      )}
+      {/* Dialog */}
+      <CreateAssetDialog
+        open={createDialogOpen}
+        onOpenChange={setCreateDialogOpen}
+      />
     </div>
   );
 }
