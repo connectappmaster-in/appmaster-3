@@ -1,19 +1,19 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { BackButton } from "@/components/BackButton";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Loader2, Clock, User, Tag, MessageSquare } from "lucide-react";
+import { Loader2, Clock, User, Tag, MessageSquare, ArrowLeft } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { toast } from "sonner";
 import { useState } from "react";
 
 export default function TicketDetail() {
-  const { ticketId } = useParams();
+  const { id: ticketId } = useParams();
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [comment, setComment] = useState("");
   const [newStatus, setNewStatus] = useState("");
@@ -117,7 +117,7 @@ export default function TicketDetail() {
       toast.success("Status updated");
       queryClient.invalidateQueries({ queryKey: ["helpdesk-ticket", ticketId] });
       queryClient.invalidateQueries({ queryKey: ["helpdesk-tickets"] });
-      queryClient.invalidateQueries({ queryKey: ["helpdesk-stats"] });
+      queryClient.invalidateQueries({ queryKey: ["helpdesk-dashboard-stats"] });
     },
     onError: (error: Error) => {
       toast.error("Failed to update status: " + error.message);
@@ -152,8 +152,16 @@ export default function TicketDetail() {
 
   return (
     <div className="min-h-screen bg-background">
-      <BackButton />
       <div className="container mx-auto py-8 px-4 max-w-5xl">
+        <Button
+          variant="ghost"
+          className="mb-6"
+          onClick={() => navigate("/helpdesk/tickets")}
+        >
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Back to Tickets
+        </Button>
+
         <div className="mb-6">
           <div className="flex items-center gap-3 mb-3">
             <Badge variant="outline" className="font-mono text-lg px-3 py-1">

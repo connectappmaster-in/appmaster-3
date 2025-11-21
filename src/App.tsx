@@ -20,7 +20,12 @@ import NotFound from "./pages/NotFound";
 import Depreciation from "./pages/depreciation";
 import Invoicing from "./pages/invoicing";
 import Attendance from "./pages/attendance";
-import HelpDesk from "./pages/helpdesk";
+// Helpdesk imports
+import HelpdeskDashboard from "./pages/helpdesk/index";
+import HelpdeskTickets from "./pages/helpdesk/tickets/index";
+import TicketDetail from "./pages/helpdesk/tickets/[id]";
+import NewTicket from "./pages/helpdesk/new";
+
 import Subscriptions from "./pages/subscriptions";
 import SubscriptionsDashboardPage from "./pages/subscriptions/dashboard";
 import SubscriptionsToolsPage from "./pages/subscriptions/tools";
@@ -69,7 +74,6 @@ import SuperAdminTools from "./pages/super-admin/tools";
 import { BroadcastBanner } from "./components/BroadcastBanner";
 import AppDetailPage from "./pages/apps/[slug]";
 import Notifications from "./pages/Notifications";
-import TicketDetail from "./pages/helpdesk/TicketDetail";
 import SRM from "./pages/srm/index";
 import RequestDetail from "./pages/srm/RequestDetail";
 import ITAM from "./pages/itam/index";
@@ -124,8 +128,13 @@ const App = () => {
           <Route path="/depreciation" element={<ToolAccessGuard toolKey="assets"><Depreciation /></ToolAccessGuard>} />
           <Route path="/invoicing" element={<ToolAccessGuard toolKey="invoicing"><Invoicing /></ToolAccessGuard>} />
           <Route path="/attendance" element={<ToolAccessGuard toolKey="attendance"><Attendance /></ToolAccessGuard>} />
-          <Route path="/helpdesk" element={<ToolAccessGuard toolKey="helpdesk"><HelpDesk /></ToolAccessGuard>} />
-          <Route path="/helpdesk/ticket/:ticketId" element={<ToolAccessGuard toolKey="helpdesk"><TicketDetail /></ToolAccessGuard>} />
+          
+          {/* Helpdesk Routes - All under /helpdesk */}
+          <Route path="/helpdesk" element={<ToolAccessGuard toolKey="helpdesk"><HelpdeskDashboard /></ToolAccessGuard>} />
+          <Route path="/helpdesk/tickets" element={<ToolAccessGuard toolKey="helpdesk"><HelpdeskTickets /></ToolAccessGuard>} />
+          <Route path="/helpdesk/tickets/:id" element={<ToolAccessGuard toolKey="helpdesk"><TicketDetail /></ToolAccessGuard>} />
+          <Route path="/helpdesk/new" element={<ToolAccessGuard toolKey="helpdesk"><NewTicket /></ToolAccessGuard>} />
+          
           <Route path="/srm" element={<ToolAccessGuard toolKey="srm"><SRM /></ToolAccessGuard>} />
           <Route path="/srm/request/:requestId" element={<ToolAccessGuard toolKey="srm"><RequestDetail /></ToolAccessGuard>} />
           <Route path="/itam" element={<ToolAccessGuard toolKey="itam"><ITAM /></ToolAccessGuard>} />

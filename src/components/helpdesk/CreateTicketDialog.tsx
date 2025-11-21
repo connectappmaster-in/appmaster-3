@@ -135,7 +135,7 @@ export const CreateTicketDialog = ({ open, onOpenChange }: CreateTicketDialogPro
     onSuccess: () => {
       toast.success("Ticket created successfully");
       queryClient.invalidateQueries({ queryKey: ["helpdesk-tickets"] });
-      queryClient.invalidateQueries({ queryKey: ["helpdesk-stats"] });
+      queryClient.invalidateQueries({ queryKey: ["helpdesk-dashboard-stats"] });
       form.reset();
       onOpenChange(false);
     },
