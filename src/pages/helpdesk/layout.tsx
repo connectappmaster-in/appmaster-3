@@ -20,9 +20,14 @@ const routeTitles: Record<string, string> = {
   "/helpdesk/new": "New Ticket",
   "/helpdesk/queues": "Queues",
   "/helpdesk/sla": "SLA Policies",
-  "/helpdesk/assets": "Assets",
+  "/helpdesk/assets": "IT Asset Management",
   "/helpdesk/kb": "Knowledge Base",
-  "/helpdesk/reports": "Reports",
+  "/helpdesk/problems": "Problem Management",
+  "/helpdesk/changes": "Change Management",
+  "/helpdesk/automation": "Automation Rules",
+  "/helpdesk/subscription": "Subscription Management",
+  "/helpdesk/reports": "Reports & Analytics",
+  "/helpdesk/admin": "Admin Panel",
   "/helpdesk/settings": "Settings",
 };
 
