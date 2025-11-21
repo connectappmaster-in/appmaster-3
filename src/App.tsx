@@ -69,6 +69,7 @@ import SuperAdminTools from "./pages/super-admin/tools";
 import { BroadcastBanner } from "./components/BroadcastBanner";
 import AppDetailPage from "./pages/apps/[slug]";
 import Notifications from "./pages/Notifications";
+import TicketDetail from "./pages/helpdesk/TicketDetail";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -121,6 +122,7 @@ const App = () => {
           <Route path="/invoicing" element={<ToolAccessGuard toolKey="invoicing"><Invoicing /></ToolAccessGuard>} />
           <Route path="/attendance" element={<ToolAccessGuard toolKey="attendance"><Attendance /></ToolAccessGuard>} />
           <Route path="/helpdesk" element={<ToolAccessGuard toolKey="helpdesk"><HelpDesk /></ToolAccessGuard>} />
+          <Route path="/helpdesk/ticket/:ticketId" element={<ToolAccessGuard toolKey="helpdesk"><TicketDetail /></ToolAccessGuard>} />
           <Route path="/subscriptions" element={<Subscriptions />}>
             <Route index element={<SubscriptionsDashboardPage />} />
             <Route path="tools" element={<SubscriptionsToolsPage />} />
