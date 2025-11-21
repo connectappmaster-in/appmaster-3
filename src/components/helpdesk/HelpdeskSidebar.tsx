@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { LayoutDashboard, Ticket, Plus, ListFilter, Clock, Package, BookOpen, BarChart3, Settings, ChevronLeft } from "lucide-react";
+import { LayoutDashboard, Ticket, Plus, ListFilter, Clock, Package, BookOpen, BarChart3, Settings, ChevronLeft, AlertCircle, GitBranch, Zap, CreditCard, Shield } from "lucide-react";
 import appmasterLogo from "@/assets/appmaster-logo.png";
 import { NavLink, useLocation } from "react-router-dom";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -10,9 +10,14 @@ const navItems = [
   { title: "New Ticket", url: "/helpdesk/new", icon: Plus },
   { title: "Queues", url: "/helpdesk/queues", icon: ListFilter },
   { title: "SLA Policies", url: "/helpdesk/sla", icon: Clock },
-  { title: "Assets", url: "/helpdesk/assets", icon: Package },
+  { title: "ITAM", url: "/helpdesk/assets", icon: Package },
   { title: "Knowledge Base", url: "/helpdesk/kb", icon: BookOpen },
+  { title: "Problems", url: "/helpdesk/problems", icon: AlertCircle },
+  { title: "Changes", url: "/helpdesk/changes", icon: GitBranch },
+  { title: "Automation", url: "/helpdesk/automation", icon: Zap },
+  { title: "Subscriptions", url: "/helpdesk/subscription", icon: CreditCard },
   { title: "Reports", url: "/helpdesk/reports", icon: BarChart3 },
+  { title: "Admin", url: "/helpdesk/admin", icon: Shield },
   { title: "Settings", url: "/helpdesk/settings", icon: Settings },
 ];
 

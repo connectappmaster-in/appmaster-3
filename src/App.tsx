@@ -26,6 +26,17 @@ import HelpdeskDashboard from "./pages/helpdesk/index";
 import HelpdeskTickets from "./pages/helpdesk/tickets/index";
 import TicketDetail from "./pages/helpdesk/tickets/[id]";
 import NewTicket from "./pages/helpdesk/new";
+import HelpdeskAssets from "./pages/helpdesk/assets";
+import HelpdeskKB from "./pages/helpdesk/kb";
+import HelpdeskProblems from "./pages/helpdesk/problems";
+import HelpdeskChanges from "./pages/helpdesk/changes";
+import HelpdeskAutomation from "./pages/helpdesk/automation";
+import HelpdeskSubscription from "./pages/helpdesk/subscription";
+import HelpdeskAdmin from "./pages/helpdesk/admin";
+import HelpdeskSettings from "./pages/helpdesk/settings";
+import HelpdeskQueues from "./pages/helpdesk/queues";
+import HelpdeskSLA from "./pages/helpdesk/sla";
+import HelpdeskReports from "./pages/helpdesk/reports";
 
 import Subscriptions from "./pages/subscriptions";
 import SubscriptionsDashboardPage from "./pages/subscriptions/dashboard";
@@ -136,6 +147,17 @@ const App = () => {
             <Route path="tickets" element={<HelpdeskTickets />} />
             <Route path="tickets/:id" element={<TicketDetail />} />
             <Route path="new" element={<NewTicket />} />
+            <Route path="assets" element={<HelpdeskAssets />} />
+            <Route path="kb" element={<HelpdeskKB />} />
+            <Route path="problems" element={<HelpdeskProblems />} />
+            <Route path="changes" element={<HelpdeskChanges />} />
+            <Route path="automation" element={<HelpdeskAutomation />} />
+            <Route path="subscription" element={<HelpdeskSubscription />} />
+            <Route path="admin" element={<HelpdeskAdmin />} />
+            <Route path="settings" element={<HelpdeskSettings />} />
+            <Route path="queues" element={<HelpdeskQueues />} />
+            <Route path="sla" element={<HelpdeskSLA />} />
+            <Route path="reports" element={<HelpdeskReports />} />
           </Route>
           
           <Route path="/srm" element={<ToolAccessGuard toolKey="srm"><SRM /></ToolAccessGuard>} />
