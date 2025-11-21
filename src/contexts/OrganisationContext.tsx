@@ -33,9 +33,27 @@ export const OrganisationProvider = ({ children }: { children: React.ReactNode }
     }
 
     try {
+      // First get the user's organisation_id
+      const { data: userData, error: userError } = await supabase
+        .from("users")
+        .select("organisation_id")
+        .eq("id", user.id)
+        .single();
+
+      if (userError) throw userError;
+      
+      if (!userData?.organisation_id) {
+        console.log("User has no organisation_id");
+        setOrganisation(null);
+        setLoading(false);
+        return;
+      }
+
+      // Then fetch the organisation
       const { data, error } = await supabase
         .from("organisations")
         .select("*")
+        .eq("id", userData.organisation_id)
         .single();
 
       if (error) throw error;
