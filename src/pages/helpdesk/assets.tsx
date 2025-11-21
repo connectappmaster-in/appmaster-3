@@ -14,19 +14,36 @@ export default function HelpdeskAssets() {
   const [searchQuery, setSearchQuery] = useState("");
   const { data: stats, isLoading: statsLoading } = useITAMStats();
 
+  const handleAddAssetClick = () => {
+    console.log("=== ADD ASSET BUTTON CLICKED ===");
+    console.log("Current state:", createDialogOpen);
+    setCreateDialogOpen(true);
+    console.log("State set to true");
+  };
+
   return (
     <div className="max-w-7xl">
-      <div className="flex items-center justify-between mb-6">
+      {/* Debug Test Button */}
+      <div className="mb-4 p-4 bg-yellow-100 dark:bg-yellow-900 rounded">
+        <p className="text-sm mb-2">Debug: Dialog state is {createDialogOpen ? "OPEN" : "CLOSED"}</p>
+        <Button 
+          onClick={handleAddAssetClick}
+          variant="destructive"
+          type="button"
+        >
+          🧪 TEST: Click Me to Open Dialog
+        </Button>
+      </div>
+
+      <div className="flex items-center justify-between mb-6 relative">
         <div>
           <h2 className="text-2xl font-bold mb-1">IT Asset Management</h2>
           <p className="text-muted-foreground">Track and manage IT assets, assignments, vendors, and licenses</p>
         </div>
         <Button 
-          onClick={() => {
-            console.log("Add Asset button clicked");
-            setCreateDialogOpen(true);
-          }}
-          className="z-10"
+          onClick={handleAddAssetClick}
+          className="relative z-50"
+          type="button"
         >
           <Plus className="h-4 w-4 mr-2" />
           Add Asset
@@ -128,7 +145,10 @@ export default function HelpdeskAssets() {
 
       <CreateAssetDialog
         open={createDialogOpen}
-        onOpenChange={setCreateDialogOpen}
+        onOpenChange={(open) => {
+          console.log("Dialog onOpenChange called with:", open);
+          setCreateDialogOpen(open);
+        }}
       />
     </div>
   );
