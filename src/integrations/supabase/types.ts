@@ -670,6 +670,120 @@ export type Database = {
           },
         ]
       }
+      helpdesk_automation_logs: {
+        Row: {
+          error_message: string | null
+          executed_at: string | null
+          id: number
+          rule_id: number
+          status: string | null
+          ticket_id: number | null
+          trigger_data: Json | null
+        }
+        Insert: {
+          error_message?: string | null
+          executed_at?: string | null
+          id?: number
+          rule_id: number
+          status?: string | null
+          ticket_id?: number | null
+          trigger_data?: Json | null
+        }
+        Update: {
+          error_message?: string | null
+          executed_at?: string | null
+          id?: number
+          rule_id?: number
+          status?: string | null
+          ticket_id?: number | null
+          trigger_data?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "helpdesk_automation_logs_rule_id_fkey"
+            columns: ["rule_id"]
+            isOneToOne: false
+            referencedRelation: "helpdesk_automation_rules"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "helpdesk_automation_logs_ticket_id_fkey"
+            columns: ["ticket_id"]
+            isOneToOne: false
+            referencedRelation: "helpdesk_tickets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      helpdesk_automation_rules: {
+        Row: {
+          actions: Json | null
+          conditions: Json | null
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          execution_count: number | null
+          execution_order: number | null
+          id: number
+          is_active: boolean | null
+          last_executed_at: string | null
+          name: string
+          organisation_id: string | null
+          tenant_id: number
+          trigger_type: string
+          updated_at: string | null
+        }
+        Insert: {
+          actions?: Json | null
+          conditions?: Json | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          execution_count?: number | null
+          execution_order?: number | null
+          id?: number
+          is_active?: boolean | null
+          last_executed_at?: string | null
+          name: string
+          organisation_id?: string | null
+          tenant_id: number
+          trigger_type: string
+          updated_at?: string | null
+        }
+        Update: {
+          actions?: Json | null
+          conditions?: Json | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          execution_count?: number | null
+          execution_order?: number | null
+          id?: number
+          is_active?: boolean | null
+          last_executed_at?: string | null
+          name?: string
+          organisation_id?: string | null
+          tenant_id?: number
+          trigger_type?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "helpdesk_automation_rules_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "helpdesk_automation_rules_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       helpdesk_categories: {
         Row: {
           created_at: string | null
@@ -721,6 +835,551 @@ export type Database = {
           },
           {
             foreignKeyName: "helpdesk_categories_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      helpdesk_change_approvals: {
+        Row: {
+          approved_at: string | null
+          approver_id: string
+          change_id: number
+          comments: string | null
+          created_at: string | null
+          id: number
+          status: string | null
+        }
+        Insert: {
+          approved_at?: string | null
+          approver_id: string
+          change_id: number
+          comments?: string | null
+          created_at?: string | null
+          id?: number
+          status?: string | null
+        }
+        Update: {
+          approved_at?: string | null
+          approver_id?: string
+          change_id?: number
+          comments?: string | null
+          created_at?: string | null
+          id?: number
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "helpdesk_change_approvals_change_id_fkey"
+            columns: ["change_id"]
+            isOneToOne: false
+            referencedRelation: "helpdesk_changes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      helpdesk_changes: {
+        Row: {
+          actual_end: string | null
+          actual_start: string | null
+          approval_status: string | null
+          assigned_to: string | null
+          category_id: number | null
+          change_number: string
+          created_at: string | null
+          description: string
+          id: number
+          impact: string | null
+          implementation_plan: string | null
+          organisation_id: string | null
+          priority: string | null
+          requested_by: string | null
+          requires_approval: boolean | null
+          risk_level: string | null
+          rollback_plan: string | null
+          scheduled_end: string | null
+          scheduled_start: string | null
+          status: string | null
+          tenant_id: number
+          title: string
+          type: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          actual_end?: string | null
+          actual_start?: string | null
+          approval_status?: string | null
+          assigned_to?: string | null
+          category_id?: number | null
+          change_number: string
+          created_at?: string | null
+          description: string
+          id?: number
+          impact?: string | null
+          implementation_plan?: string | null
+          organisation_id?: string | null
+          priority?: string | null
+          requested_by?: string | null
+          requires_approval?: boolean | null
+          risk_level?: string | null
+          rollback_plan?: string | null
+          scheduled_end?: string | null
+          scheduled_start?: string | null
+          status?: string | null
+          tenant_id: number
+          title: string
+          type?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          actual_end?: string | null
+          actual_start?: string | null
+          approval_status?: string | null
+          assigned_to?: string | null
+          category_id?: number | null
+          change_number?: string
+          created_at?: string | null
+          description?: string
+          id?: number
+          impact?: string | null
+          implementation_plan?: string | null
+          organisation_id?: string | null
+          priority?: string | null
+          requested_by?: string | null
+          requires_approval?: boolean | null
+          risk_level?: string | null
+          rollback_plan?: string | null
+          scheduled_end?: string | null
+          scheduled_start?: string | null
+          status?: string | null
+          tenant_id?: number
+          title?: string
+          type?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "helpdesk_changes_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "helpdesk_categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "helpdesk_changes_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "helpdesk_changes_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      helpdesk_kb_article_feedback: {
+        Row: {
+          article_id: number
+          comment: string | null
+          created_at: string | null
+          id: number
+          is_helpful: boolean
+          user_id: string | null
+        }
+        Insert: {
+          article_id: number
+          comment?: string | null
+          created_at?: string | null
+          id?: number
+          is_helpful: boolean
+          user_id?: string | null
+        }
+        Update: {
+          article_id?: number
+          comment?: string | null
+          created_at?: string | null
+          id?: number
+          is_helpful?: boolean
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "helpdesk_kb_article_feedback_article_id_fkey"
+            columns: ["article_id"]
+            isOneToOne: false
+            referencedRelation: "helpdesk_kb_articles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      helpdesk_kb_articles: {
+        Row: {
+          attachments: Json | null
+          author_id: string | null
+          category_id: number | null
+          content: string
+          created_at: string | null
+          helpful_count: number | null
+          id: number
+          not_helpful_count: number | null
+          organisation_id: string | null
+          published_at: string | null
+          status: string | null
+          summary: string | null
+          tags: string[] | null
+          tenant_id: number
+          title: string
+          updated_at: string | null
+          views_count: number | null
+        }
+        Insert: {
+          attachments?: Json | null
+          author_id?: string | null
+          category_id?: number | null
+          content: string
+          created_at?: string | null
+          helpful_count?: number | null
+          id?: number
+          not_helpful_count?: number | null
+          organisation_id?: string | null
+          published_at?: string | null
+          status?: string | null
+          summary?: string | null
+          tags?: string[] | null
+          tenant_id: number
+          title: string
+          updated_at?: string | null
+          views_count?: number | null
+        }
+        Update: {
+          attachments?: Json | null
+          author_id?: string | null
+          category_id?: number | null
+          content?: string
+          created_at?: string | null
+          helpful_count?: number | null
+          id?: number
+          not_helpful_count?: number | null
+          organisation_id?: string | null
+          published_at?: string | null
+          status?: string | null
+          summary?: string | null
+          tags?: string[] | null
+          tenant_id?: number
+          title?: string
+          updated_at?: string | null
+          views_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "helpdesk_kb_articles_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "helpdesk_kb_categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "helpdesk_kb_articles_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "helpdesk_kb_articles_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      helpdesk_kb_categories: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          display_order: number | null
+          icon: string | null
+          id: number
+          is_active: boolean | null
+          name: string
+          organisation_id: string | null
+          parent_id: number | null
+          tenant_id: number
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          icon?: string | null
+          id?: number
+          is_active?: boolean | null
+          name: string
+          organisation_id?: string | null
+          parent_id?: number | null
+          tenant_id: number
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          icon?: string | null
+          id?: number
+          is_active?: boolean | null
+          name?: string
+          organisation_id?: string | null
+          parent_id?: number | null
+          tenant_id?: number
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "helpdesk_kb_categories_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "helpdesk_kb_categories_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "helpdesk_kb_categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "helpdesk_kb_categories_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      helpdesk_problem_tickets: {
+        Row: {
+          created_at: string | null
+          id: number
+          problem_id: number
+          ticket_id: number
+        }
+        Insert: {
+          created_at?: string | null
+          id?: number
+          problem_id: number
+          ticket_id: number
+        }
+        Update: {
+          created_at?: string | null
+          id?: number
+          problem_id?: number
+          ticket_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "helpdesk_problem_tickets_problem_id_fkey"
+            columns: ["problem_id"]
+            isOneToOne: false
+            referencedRelation: "helpdesk_problems"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "helpdesk_problem_tickets_ticket_id_fkey"
+            columns: ["ticket_id"]
+            isOneToOne: false
+            referencedRelation: "helpdesk_tickets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      helpdesk_problems: {
+        Row: {
+          assigned_to: string | null
+          category_id: number | null
+          closed_at: string | null
+          created_at: string | null
+          created_by: string | null
+          description: string
+          id: number
+          organisation_id: string | null
+          priority: string | null
+          problem_number: string
+          resolved_at: string | null
+          root_cause: string | null
+          solution: string | null
+          status: string | null
+          tenant_id: number
+          title: string
+          updated_at: string | null
+          workaround: string | null
+        }
+        Insert: {
+          assigned_to?: string | null
+          category_id?: number | null
+          closed_at?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description: string
+          id?: number
+          organisation_id?: string | null
+          priority?: string | null
+          problem_number: string
+          resolved_at?: string | null
+          root_cause?: string | null
+          solution?: string | null
+          status?: string | null
+          tenant_id: number
+          title: string
+          updated_at?: string | null
+          workaround?: string | null
+        }
+        Update: {
+          assigned_to?: string | null
+          category_id?: number | null
+          closed_at?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string
+          id?: number
+          organisation_id?: string | null
+          priority?: string | null
+          problem_number?: string
+          resolved_at?: string | null
+          root_cause?: string | null
+          solution?: string | null
+          status?: string | null
+          tenant_id?: number
+          title?: string
+          updated_at?: string | null
+          workaround?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "helpdesk_problems_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "helpdesk_categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "helpdesk_problems_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "helpdesk_problems_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      helpdesk_queue_members: {
+        Row: {
+          agent_id: string
+          created_at: string | null
+          id: number
+          is_active: boolean | null
+          max_concurrent_tickets: number | null
+          queue_id: number
+        }
+        Insert: {
+          agent_id: string
+          created_at?: string | null
+          id?: number
+          is_active?: boolean | null
+          max_concurrent_tickets?: number | null
+          queue_id: number
+        }
+        Update: {
+          agent_id?: string
+          created_at?: string | null
+          id?: number
+          is_active?: boolean | null
+          max_concurrent_tickets?: number | null
+          queue_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "helpdesk_queue_members_queue_id_fkey"
+            columns: ["queue_id"]
+            isOneToOne: false
+            referencedRelation: "helpdesk_queues"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      helpdesk_queues: {
+        Row: {
+          assignment_method: string | null
+          auto_assign: boolean | null
+          created_at: string | null
+          description: string | null
+          email_address: string | null
+          id: number
+          is_active: boolean | null
+          name: string
+          organisation_id: string | null
+          sla_policy_id: number | null
+          tenant_id: number
+          updated_at: string | null
+        }
+        Insert: {
+          assignment_method?: string | null
+          auto_assign?: boolean | null
+          created_at?: string | null
+          description?: string | null
+          email_address?: string | null
+          id?: number
+          is_active?: boolean | null
+          name: string
+          organisation_id?: string | null
+          sla_policy_id?: number | null
+          tenant_id: number
+          updated_at?: string | null
+        }
+        Update: {
+          assignment_method?: string | null
+          auto_assign?: boolean | null
+          created_at?: string | null
+          description?: string | null
+          email_address?: string | null
+          id?: number
+          is_active?: boolean | null
+          name?: string
+          organisation_id?: string | null
+          sla_policy_id?: number | null
+          tenant_id?: number
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "helpdesk_queues_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "helpdesk_queues_sla_policy_id_fkey"
+            columns: ["sla_policy_id"]
+            isOneToOne: false
+            referencedRelation: "helpdesk_sla_policies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "helpdesk_queues_tenant_id_fkey"
             columns: ["tenant_id"]
             isOneToOne: false
             referencedRelation: "tenants"
@@ -1006,6 +1665,7 @@ export type Database = {
           id: number
           organisation_id: string | null
           priority: string
+          queue_id: number | null
           requester_id: string | null
           resolved_at: string | null
           sla_breached: boolean | null
@@ -1028,6 +1688,7 @@ export type Database = {
           id?: number
           organisation_id?: string | null
           priority?: string
+          queue_id?: number | null
           requester_id?: string | null
           resolved_at?: string | null
           sla_breached?: boolean | null
@@ -1050,6 +1711,7 @@ export type Database = {
           id?: number
           organisation_id?: string | null
           priority?: string
+          queue_id?: number | null
           requester_id?: string | null
           resolved_at?: string | null
           sla_breached?: boolean | null
@@ -1117,6 +1779,13 @@ export type Database = {
             columns: ["organisation_id"]
             isOneToOne: false
             referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "helpdesk_tickets_queue_id_fkey"
+            columns: ["queue_id"]
+            isOneToOne: false
+            referencedRelation: "helpdesk_queues"
             referencedColumns: ["id"]
           },
           {
@@ -3770,11 +4439,19 @@ export type Database = {
         }
         Returns: string
       }
+      generate_change_number: {
+        Args: { p_org_id: string; p_tenant_id: number }
+        Returns: string
+      }
       generate_helpdesk_ticket_number: {
         Args: { p_org_id: string; p_tenant_id: number }
         Returns: string
       }
       generate_invitation_token: { Args: never; Returns: string }
+      generate_problem_number: {
+        Args: { p_org_id: string; p_tenant_id: number }
+        Returns: string
+      }
       generate_srm_request_number: {
         Args: { p_org_id: string; p_tenant_id: number }
         Returns: string
