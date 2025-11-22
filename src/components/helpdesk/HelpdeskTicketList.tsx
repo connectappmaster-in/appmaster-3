@@ -1,10 +1,14 @@
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { formatDistanceToNow } from "date-fns";
-import { Loader2, AlertCircle } from "lucide-react";
+import { Loader2, AlertCircle, Edit, UserPlus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { EditTicketDialog } from "./EditTicketDialog";
+import { AssignTicketDialog } from "./AssignTicketDialog";
 
 interface HelpdeskTicketListProps {
   status?: string;
@@ -12,6 +16,8 @@ interface HelpdeskTicketListProps {
 
 export const HelpdeskTicketList = ({ status }: HelpdeskTicketListProps) => {
   const navigate = useNavigate();
+  const [editDialog, setEditDialog] = useState<{ open: boolean; ticket: any }>({ open: false, ticket: null });
+  const [assignDialog, setAssignDialog] = useState<{ open: boolean; ticket: any }>({ open: false, ticket: null });
 
   const { data: tickets, isLoading, error } = useQuery({
     queryKey: ["helpdesk-tickets", status],
@@ -97,54 +103,90 @@ export const HelpdeskTicketList = ({ status }: HelpdeskTicketListProps) => {
   }
 
   return (
-    <div className="space-y-3">
-      {tickets.map((ticket: any) => (
-        <Card
-          key={ticket.id}
-          className="cursor-pointer hover:shadow-md transition-shadow"
-          onClick={() => navigate(`/helpdesk/tickets/${ticket.id}`)}
-        >
-          <CardContent className="p-6">
-            <div className="flex items-start justify-between gap-4">
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-3 mb-2">
-                  <Badge variant="outline" className="font-mono">
-                    {ticket.ticket_number}
-                  </Badge>
-                  <Badge className={getPriorityColor(ticket.priority)}>
-                    {ticket.priority}
-                  </Badge>
-                  <Badge variant="secondary" className={getStatusColor(ticket.status)}>
-                    {ticket.status.replace("_", " ")}
-                  </Badge>
-                  {ticket.category && (
-                    <Badge variant="outline">{ticket.category.name}</Badge>
-                  )}
+    <>
+      <div className="space-y-3">
+        {tickets.map((ticket: any) => (
+          <Card key={ticket.id} className="hover:shadow-md transition-shadow">
+            <CardContent className="p-6">
+              <div className="flex items-start justify-between gap-4">
+                <div 
+                  className="flex-1 min-w-0 cursor-pointer"
+                  onClick={() => navigate(`/helpdesk/tickets/${ticket.id}`)}
+                >
+                  <div className="flex items-center gap-3 mb-2">
+                    <Badge variant="outline" className="font-mono">
+                      {ticket.ticket_number}
+                    </Badge>
+                    <Badge className={getPriorityColor(ticket.priority)}>
+                      {ticket.priority}
+                    </Badge>
+                    <Badge variant="secondary" className={getStatusColor(ticket.status)}>
+                      {ticket.status.replace("_", " ")}
+                    </Badge>
+                    {ticket.category && (
+                      <Badge variant="outline">{ticket.category.name}</Badge>
+                    )}
+                  </div>
+
+                  <h3 className="text-lg font-semibold mb-1 truncate">{ticket.title}</h3>
+                  <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
+                    {ticket.description}
+                  </p>
+
+                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                    <span>
+                      Requester: <span className="text-foreground font-medium">{ticket.requester?.name || "Unknown"}</span>
+                    </span>
+                    {ticket.assignee && (
+                      <span>
+                        Assigned to: <span className="text-foreground font-medium">{ticket.assignee.name}</span>
+                      </span>
+                    )}
+                    <span>
+                      {formatDistanceToNow(new Date(ticket.created_at), { addSuffix: true })}
+                    </span>
+                  </div>
                 </div>
 
-                <h3 className="text-lg font-semibold mb-1 truncate">{ticket.title}</h3>
-                <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
-                  {ticket.description}
-                </p>
-
-                <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                  <span>
-                    Requester: <span className="text-foreground font-medium">{ticket.requester?.name || "Unknown"}</span>
-                  </span>
-                  {ticket.assignee && (
-                    <span>
-                      Assigned to: <span className="text-foreground font-medium">{ticket.assignee.name}</span>
-                    </span>
-                  )}
-                  <span>
-                    {formatDistanceToNow(new Date(ticket.created_at), { addSuffix: true })}
-                  </span>
+                <div className="flex gap-2 shrink-0">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setAssignDialog({ open: true, ticket });
+                    }}
+                  >
+                    <UserPlus className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setEditDialog({ open: true, ticket });
+                    }}
+                  >
+                    <Edit className="h-4 w-4" />
+                  </Button>
                 </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
-      ))}
-    </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      <EditTicketDialog
+        open={editDialog.open}
+        onOpenChange={(open) => setEditDialog({ open, ticket: null })}
+        ticket={editDialog.ticket}
+      />
+
+      <AssignTicketDialog
+        open={assignDialog.open}
+        onOpenChange={(open) => setAssignDialog({ open, ticket: null })}
+        ticket={assignDialog.ticket}
+      />
+    </>
   );
 };

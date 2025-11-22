@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Plus } from "lucide-react";
 import { HelpdeskTicketList } from "@/components/helpdesk/HelpdeskTicketList";
 import { CreateTicketDialog } from "@/components/helpdesk/CreateTicketDialog";
+import { TicketStatsCards } from "@/components/helpdesk/TicketStatsCards";
 import { useNavigate } from "react-router-dom";
 
 export default function HelpdeskTickets() {
@@ -28,6 +29,8 @@ export default function HelpdeskTickets() {
             </Button>
           </div>
         </div>
+
+        <TicketStatsCards />
 
         <Tabs defaultValue="all" className="w-full">
           <TabsList>
