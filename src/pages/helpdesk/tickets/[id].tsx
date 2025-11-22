@@ -6,10 +6,12 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Loader2, Clock, User, Tag, MessageSquare, ArrowLeft } from "lucide-react";
+import { Loader2, Clock, User, Tag, MessageSquare, ArrowLeft, Edit, UserPlus } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { toast } from "sonner";
 import { useState } from "react";
+import { EditTicketDialog } from "@/components/helpdesk/EditTicketDialog";
+import { AssignTicketDialog } from "@/components/helpdesk/AssignTicketDialog";
 
 export default function TicketDetail() {
   const { id: ticketId } = useParams();
@@ -17,6 +19,8 @@ export default function TicketDetail() {
   const queryClient = useQueryClient();
   const [comment, setComment] = useState("");
   const [newStatus, setNewStatus] = useState("");
+  const [editDialog, setEditDialog] = useState(false);
+  const [assignDialog, setAssignDialog] = useState(false);
 
   const { data: ticket, isLoading } = useQuery({
     queryKey: ["helpdesk-ticket", ticketId],
@@ -153,14 +157,32 @@ export default function TicketDetail() {
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto py-8 px-4 max-w-5xl">
-        <Button
-          variant="ghost"
-          className="mb-6"
-          onClick={() => navigate("/helpdesk/tickets")}
-        >
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          Back to Tickets
-        </Button>
+        <div className="flex items-center justify-between mb-6">
+          <Button
+            variant="ghost"
+            onClick={() => navigate("/helpdesk/tickets")}
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Tickets
+          </Button>
+
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setAssignDialog(true)}
+            >
+              <UserPlus className="h-4 w-4 mr-2" />
+              Assign
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => setEditDialog(true)}
+            >
+              <Edit className="h-4 w-4 mr-2" />
+              Edit
+            </Button>
+          </div>
+        </div>
 
         <div className="mb-6">
           <div className="flex items-center gap-3 mb-3">
@@ -306,6 +328,18 @@ export default function TicketDetail() {
           </div>
         </div>
       </div>
+
+      <EditTicketDialog
+        open={editDialog}
+        onOpenChange={setEditDialog}
+        ticket={ticket}
+      />
+
+      <AssignTicketDialog
+        open={assignDialog}
+        onOpenChange={setAssignDialog}
+        ticket={ticket}
+      />
     </div>
   );
 }
