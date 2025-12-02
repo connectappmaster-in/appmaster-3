@@ -12,6 +12,7 @@ interface DeviceUpdatePayload {
   os_build?: string;
   last_boot_time?: string;
   ip_address?: string;
+  organisation_id?: string;
   pending_updates: Array<{
     kb_number: string;
     title: string;
@@ -94,12 +95,34 @@ Deno.serve(async (req) => {
 
     console.log('Compliance status calculated:', complianceStatus);
 
-    // First, try to find existing device by hostname
-    const { data: existingDevices } = await supabase
+    // Get organisation and tenant info
+    let organisationId = payload.organisation_id || null;
+    let tenantId: number = 1;
+
+    if (organisationId) {
+      const { data: orgData } = await supabase
+        .from('organisations')
+        .select('id')
+        .eq('id', organisationId)
+        .single();
+      
+      if (!orgData) {
+        console.error('Invalid organisation_id provided');
+        organisationId = null;
+      }
+    }
+
+    // First, try to find existing device by hostname and organisation
+    let query = supabase
       .from('system_devices')
       .select('*')
-      .eq('device_name', payload.hostname)
-      .limit(1);
+      .eq('device_name', payload.hostname);
+    
+    if (organisationId) {
+      query = query.eq('organisation_id', organisationId);
+    }
+
+    const { data: existingDevices } = await query.limit(1);
 
     let deviceId: string;
 
@@ -133,22 +156,28 @@ Deno.serve(async (req) => {
     } else {
       // Create new device
       console.log('Creating new device');
+      const deviceData: any = {
+        device_name: payload.hostname,
+        device_uuid: payload.serial_number || payload.hostname,
+        os_type: 'Windows',
+        os_version: payload.os_version,
+        os_build: payload.os_build || null,
+        last_seen: new Date().toISOString(),
+        last_update_scan: new Date().toISOString(),
+        update_compliance_status: complianceStatus,
+        pending_critical_count: payload.pending_updates.filter(u => u.severity?.toLowerCase() === 'critical').length,
+        pending_total_count: payload.pending_updates.length,
+        failed_updates_count: payload.failed_updates?.length || 0,
+        tenant_id: tenantId,
+      };
+
+      if (organisationId) {
+        deviceData.organisation_id = organisationId;
+      }
+
       const { data: newDevice, error: insertError } = await supabase
         .from('system_devices')
-        .insert({
-          device_name: payload.hostname,
-          device_uuid: payload.serial_number || payload.hostname,
-          os_type: 'Windows',
-          os_version: payload.os_version,
-          os_build: payload.os_build || null,
-          last_seen: new Date().toISOString(),
-          last_update_scan: new Date().toISOString(),
-          update_compliance_status: complianceStatus,
-          pending_critical_count: payload.pending_updates.filter(u => u.severity?.toLowerCase() === 'critical').length,
-          pending_total_count: payload.pending_updates.length,
-          failed_updates_count: payload.failed_updates?.length || 0,
-          tenant_id: 1, // Default tenant
-        })
+        .insert(deviceData)
         .select()
         .single();
 
@@ -166,42 +195,54 @@ Deno.serve(async (req) => {
 
     // Log pending updates
     for (const update of payload.pending_updates) {
-      updateEntries.push({
+      const entryData: any = {
         device_id: deviceId,
         kb_number: update.kb_number,
         title: update.title,
         severity: update.severity || 'Unknown',
         status: 'pending',
         detected_date: new Date().toISOString(),
-        tenant_id: 1,
-      });
+        tenant_id: tenantId,
+      };
+      if (organisationId) {
+        entryData.organisation_id = organisationId;
+      }
+      updateEntries.push(entryData);
     }
 
     // Log failed updates
     if (payload.failed_updates) {
       for (const update of payload.failed_updates) {
-        updateEntries.push({
+        const entryData: any = {
           device_id: deviceId,
           kb_number: update.kb_number,
           title: update.title,
           status: 'failed',
           detected_date: new Date().toISOString(),
-          tenant_id: 1,
-        });
+          tenant_id: tenantId,
+        };
+        if (organisationId) {
+          entryData.organisation_id = organisationId;
+        }
+        updateEntries.push(entryData);
       }
     }
 
     // Log installed updates (only most recent ones)
     for (const update of payload.installed_updates.slice(0, 10)) {
-      updateEntries.push({
+      const entryData: any = {
         device_id: deviceId,
         kb_number: update.kb_number,
         title: update.title,
         status: 'installed',
         installed_date: update.installed_date,
         detected_date: new Date().toISOString(),
-        tenant_id: 1,
-      });
+        tenant_id: tenantId,
+      };
+      if (organisationId) {
+        entryData.organisation_id = organisationId;
+      }
+      updateEntries.push(entryData);
     }
 
     if (updateEntries.length > 0) {
