@@ -71,19 +71,38 @@ const ComplianceStatusBadge = ({ status, pendingCritical, failedCount }: {
 };
 
 export const ActiveMachinesList = () => {
-  const { data: machines, isLoading } = useQuery({
-    queryKey: ["active-machines"],
+  const { data: userData } = useQuery({
+    queryKey: ["user-org"],
     queryFn: async () => {
+      const { data: authData } = await supabase.auth.getUser();
+      if (!authData.user) return null;
+
+      const { data } = await supabase
+        .from('users')
+        .select('organisation_id')
+        .eq('auth_user_id', authData.user.id)
+        .single();
+
+      return data?.organisation_id || null;
+    },
+  });
+
+  const { data: machines, isLoading } = useQuery({
+    queryKey: ["active-machines", userData],
+    queryFn: async () => {
+      if (!userData) return [];
+
       const { data, error } = await supabase
         .from("system_devices")
         .select("*")
-        .eq("is_deleted", false)
-        .order("last_seen", { ascending: false });
+        .eq("organisation_id", userData)
+        .order("last_seen", { ascending: false, nullsFirst: false });
 
       if (error) throw error;
       return data as SystemDevice[];
     },
-    refetchInterval: 30000, // Refresh every 30 seconds
+    enabled: !!userData,
+    refetchInterval: 30000,
   });
 
   if (isLoading) {

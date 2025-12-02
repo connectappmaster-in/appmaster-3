@@ -2,8 +2,11 @@
 # This script collects Windows Update information and sends it to AppMaster
 
 # === CONFIGURATION ===
+# IMPORTANT: Get your API key from AppMaster Settings > Device Update Agent
+# The API key can be found in your Settings under "Update Settings"
 $API_ENDPOINT = "https://zxtpfrgsfuiwdppgiliv.supabase.co/functions/v1/ingest-device-updates"
-$API_KEY = "AppMaster2024SecureKey"  # Your device agent API key
+$API_KEY = "YOUR_API_KEY_HERE"  # Replace with your actual API key from Settings
+$ORGANISATION_ID = "YOUR_ORG_ID_HERE"  # Replace with your organisation ID
 
 # === FUNCTIONS ===
 
@@ -146,6 +149,7 @@ $payload = @{
     os_build = $osBuild
     last_boot_time = $lastBootTime
     ip_address = $ipAddress
+    organisation_id = $ORGANISATION_ID
     pending_updates = $pendingUpdates
     installed_updates = $installedUpdates
     failed_updates = $failedUpdates
