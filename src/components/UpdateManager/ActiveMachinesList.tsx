@@ -70,38 +70,38 @@ const ComplianceStatusBadge = ({ status, pendingCritical, failedCount }: {
   );
 };
 
+async function fetchActiveMachines(): Promise<SystemDevice[]> {
+  try {
+    const authResponse = await supabase.auth.getUser();
+    if (!authResponse.data.user) return [];
+
+    const userResponse = await supabase
+      .from('users')
+      .select('organisation_id')
+      .eq('auth_user_id', authResponse.data.user.id)
+      .maybeSingle();
+
+    const orgId = userResponse.data?.organisation_id;
+    if (!orgId) return [];
+
+    const devicesResponse = await (supabase
+      .from("system_devices")
+      .select("*")
+      .eq("organisation_id", orgId)
+      .order("last_seen", { ascending: false, nullsFirst: false }) as any);
+
+    if (devicesResponse.error) throw devicesResponse.error;
+    return (devicesResponse.data || []) as SystemDevice[];
+  } catch (error) {
+    console.error('Error fetching active machines:', error);
+    return [];
+  }
+}
+
 export const ActiveMachinesList = () => {
-  const { data: userData } = useQuery({
-    queryKey: ["user-org"],
-    queryFn: async () => {
-      const { data: authData } = await supabase.auth.getUser();
-      if (!authData.user) return null;
-
-      const { data } = await supabase
-        .from('users')
-        .select('organisation_id')
-        .eq('auth_user_id', authData.user.id)
-        .single();
-
-      return data?.organisation_id || null;
-    },
-  });
-
-  const { data: machines, isLoading } = useQuery({
-    queryKey: ["active-machines", userData],
-    queryFn: async () => {
-      if (!userData) return [];
-
-      const { data, error } = await supabase
-        .from("system_devices")
-        .select("*")
-        .eq("organisation_id", userData)
-        .order("last_seen", { ascending: false, nullsFirst: false });
-
-      if (error) throw error;
-      return data as SystemDevice[];
-    },
-    enabled: !!userData,
+  const { data: machines = [], isLoading } = useQuery({
+    queryKey: ["active-machines"],
+    queryFn: fetchActiveMachines,
     refetchInterval: 30000,
   });
 
@@ -118,11 +118,11 @@ export const ActiveMachinesList = () => {
     );
   }
 
-  const totalMachines = machines?.length || 0;
-  const compliantMachines = machines?.filter(m => m.update_compliance_status === 'compliant').length || 0;
+  const totalMachines = machines.length;
+  const compliantMachines = machines.filter(m => m.update_compliance_status === 'compliant').length;
   const nonCompliantMachines = totalMachines - compliantMachines;
-  const criticalPending = machines?.reduce((sum, m) => sum + (m.pending_critical_count || 0), 0) || 0;
-  const failedUpdates = machines?.reduce((sum, m) => sum + (m.failed_updates_count || 0), 0) || 0;
+  const criticalPending = machines.reduce((sum, m) => sum + (m.pending_critical_count || 0), 0);
+  const failedUpdates = machines.reduce((sum, m) => sum + (m.failed_updates_count || 0), 0);
 
   return (
     <div className="space-y-4">
@@ -170,7 +170,7 @@ export const ActiveMachinesList = () => {
       </div>
 
       {/* Machines Table */}
-      {!machines || machines.length === 0 ? (
+      {machines.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-12 border border-dashed rounded-lg">
           <div className="rounded-full bg-muted p-4 mb-3">
             <Monitor className="h-8 w-8 text-muted-foreground" />
