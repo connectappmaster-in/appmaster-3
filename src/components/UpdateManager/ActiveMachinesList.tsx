@@ -84,14 +84,21 @@ async function fetchActiveMachines(): Promise<SystemDevice[]> {
     const orgId = userResponse.data?.organisation_id;
     if (!orgId) return [];
 
-    const devicesResponse = await (supabase
+    // @ts-ignore - Bypass deep type inference issue
+    const result = await supabase
       .from("system_devices")
       .select("*")
-      .eq("organisation_id", orgId)
-      .order("last_seen", { ascending: false, nullsFirst: false }) as any);
+      .eq("organisation_id", orgId);
 
-    if (devicesResponse.error) throw devicesResponse.error;
-    return (devicesResponse.data || []) as SystemDevice[];
+    if (result.error) throw result.error;
+    
+    const devices = (result.data || []) as SystemDevice[];
+    // Sort in memory
+    return devices.sort((a, b) => {
+      const aTime = a.last_seen ? new Date(a.last_seen).getTime() : 0;
+      const bTime = b.last_seen ? new Date(b.last_seen).getTime() : 0;
+      return bTime - aTime;
+    });
   } catch (error) {
     console.error('Error fetching active machines:', error);
     return [];
